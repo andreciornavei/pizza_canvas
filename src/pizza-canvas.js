@@ -1,6 +1,6 @@
 (function () {
     // Define our constructor
-    this.PizzaBuilder = function () {
+    this.PizzaCanvas = function () {
         // Define imutable options defaults
         var unprops = {
             FULL_CIRCLE: 360,
@@ -53,7 +53,7 @@
 
     //public methods
 
-    PizzaBuilder.prototype.setSlices = function (slices) {
+    PizzaCanvas.prototype.setSlices = function (slices) {
         let newSlices = parseInt(slices)
         if (newSlices <= 0) {
             newSlices = 1
@@ -62,15 +62,15 @@
         render.call(this)
     }
 
-    PizzaBuilder.prototype.setTrayAsset = function (src) {
+    PizzaCanvas.prototype.setTrayAsset = function (src) {
         loadAsset.call(this, 'tray', src)
     }
 
-    PizzaBuilder.prototype.onSliceClick = function (callback) {
+    PizzaCanvas.prototype.onSliceClick = function (callback) {
         this.options.onSliceClick = callback
     }
 
-    PizzaBuilder.prototype.fireSlicePosition = function (x, y) {
+    PizzaCanvas.prototype.fireSlicePosition = function (x, y) {
         const radian = calcHoverSlide.call(this, x, y)
         if (radian != undefined) {
             return getIndexFromRadian.call(this, radian)
@@ -79,7 +79,7 @@
         }
     }
 
-    PizzaBuilder.prototype.previewSlice = function (index, src) {
+    PizzaCanvas.prototype.previewSlice = function (index, src) {
         if (this.options.preview != undefined && this.options.preview.src == src) {
             this.options.preview.index = index
             render.call(this)
@@ -88,23 +88,23 @@
         }
     }
 
-    PizzaBuilder.prototype.clearPreview = function () {
+    PizzaCanvas.prototype.clearPreview = function () {
         this.options.preview = undefined
         render.call(this)
     }
 
-    PizzaBuilder.prototype.setSliceAsset = function (index, src) {
+    PizzaCanvas.prototype.setSliceAsset = function (index, src) {
         loadAsset.call(this, index, src)
     }
 
-    PizzaBuilder.prototype.removeSlice = function (index) {
+    PizzaCanvas.prototype.removeSlice = function (index) {
         if (this.options.assets[index] != undefined) {
             this.options.assets[index] = undefined
         }
         render.call(this)
     }
 
-    PizzaBuilder.prototype.clear = function () {
+    PizzaCanvas.prototype.clear = function () {
         for (var i = 0; i < this.options.slices; i++) {
             this.options.assets[i] = undefined
         }
