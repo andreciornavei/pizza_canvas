@@ -1,6 +1,8 @@
 # pizza_canvas
 A javascript library to build pizza with canvas
 
+![](preview.gif)
+
 ## About
 - This library helps you to build a pizza with an api interface;
 - In the example was used an library from jqueryui to make a drag and drop experience;
