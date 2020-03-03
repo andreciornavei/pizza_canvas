@@ -7,12 +7,14 @@ A javascript library to build pizza with canvas
 - This library helps you to build a pizza with an api interface;
 - In the example was used a library from jqueryui to make a drag and drop experience;
 - I have disposed an api to access some commands of library, like:
-    - set tray asset background
+    - set tray asset background with data
     - set number of slices
     - set asset to slice
     - remove asset from slice
     - preview a slice on mouse position over
     - identify slice by mouse position
+    - get all slices data
+    - get slices data by index
     - clear assets
 
 ## No dependences is needed to use the lib

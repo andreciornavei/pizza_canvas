@@ -81,6 +81,7 @@
         </select>
         <button onclick="loadtray()" class="mt-1">Carregar imagem da bandeja do projeto</button>
         <button onclick="clearslices()" class="mt-1">Clear slices</button>
+        <button onclick="printslices()" class="mt-1">Print slices</button>
 
         <ul class="pizzaList">
             <li data-value="calabresa" data-src="assets/images/pizzas/calabresa.png">
@@ -167,7 +168,8 @@
                         console.log("DROPOU '" + ui.draggable.context.dataset.value + "' NO SLOT ", index)
                         pizza.setSliceAsset(
                             index, 
-                            ui.draggable.context.dataset.src
+                            ui.draggable.context.dataset.src,
+                            { name: ui.draggable.context.dataset.value }
                         )
                     }
                 },                
@@ -185,7 +187,8 @@
         pizza.onSliceClick((index) => {
             console.log('Pedaço selecionado -> ', index)
             if(index != undefined){
-                pizza.removeSlice(index)
+                //pizza.removeSlice(index)
+                window.alert("pedaço selecionado " +  JSON.stringify(pizza.getSliceData(index)))
             }
         })
 
@@ -199,6 +202,10 @@
 
         function loadtray() {
             pizza.setTrayAsset('assets/images/pizzas/forma.png')
+        }
+
+        function printslices() {
+            window.alert(JSON.stringify(pizza.getData()));
         }
 
     </script>

@@ -14,6 +14,7 @@
             hoverSliceRadian: undefined,
             onSliceClick: undefined,
             assets: {},
+            data: {},
             preview: undefined
         }
 
@@ -93,7 +94,8 @@
         render.call(this)
     }
 
-    PizzaCanvas.prototype.setSliceAsset = function (index, src) {
+    PizzaCanvas.prototype.setSliceAsset = function (index, src, data) {
+        this.options.data[index] = data;
         loadAsset.call(this, index, src)
     }
 
@@ -101,14 +103,26 @@
         if (this.options.assets[index] != undefined) {
             this.options.assets[index] = undefined
         }
+        if (this.options.data[index] != undefined) {
+            this.options.data[index] = undefined
+        }
         render.call(this)
     }
 
     PizzaCanvas.prototype.clear = function () {
         for (var i = 0; i < this.options.slices; i++) {
             this.options.assets[i] = undefined
+            this.options.data[i] = undefined
         }
         render.call(this)
+    }
+
+    PizzaCanvas.prototype.getData = function () {
+        return this.options.data;
+    }
+
+    PizzaCanvas.prototype.getSliceData = function (index) {
+        return this.options.data[index];
     }
 
     //private methods
@@ -149,7 +163,8 @@
             this.options.onSliceClick != undefined &&
             this.options.hoverSliceRadian != undefined
         ) {
-            this.options.onSliceClick(getIndexFromRadian.call(this, this.options.hoverSliceRadian))
+            const index = getIndexFromRadian.call(this, this.options.hoverSliceRadian);
+            this.options.onSliceClick(index, this.options.data[index])
         }
     }
 
