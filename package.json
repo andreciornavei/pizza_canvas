@@ -1,0 +1,22 @@
+{
+  "name": "pizza_canvas",
+  "version": "1.0.0",
+  "description": "A javascript library to build pizza with canvas",
+  "main": "src/pizza-canvas.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreciornavei/pizza_canvas.git"
+  },
+  "keywords": [
+    "canvas"
+  ],
+  "author": "André Ciornavei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreciornavei/pizza_canvas/issues"
+  },
+  "homepage": "https://github.com/andreciornavei/pizza_canvas#readme"
+}

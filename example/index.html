@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #print_slices{
+            background-color: #f9f9f9;
+            border: 1px solid #d8d8d8;
+            max-width: 364px;
+            padding: 5px;
+            font-size: 11px;
+        }
+
+        .tools {
+            display: flex;
+            flex-direction: column;
+            width: 364px;
+            margin-top: 10px;
+        }
+
+        .pizzaList {
+            display: block;
+            padding: 0px;
+            margin: 10px 0px 0px 0px;
+            list-style: none;
+            text-decoration: none;
+        }
+
+        .pizzaList>li {
+            display: inline-block;
+            align-items: center;
+            font-size: 14px;
+            margin: 5px 0px;
+            border: 1px solid #cccccc;
+            background-color: #e9e9e9;
+            padding: 5px 15px 5px 5px;
+            border-radius: 50px;
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .pizzaList>li:hover {
+            background-color: #0a0a0a;
+            color: #e9e9e9;
+            cursor: move;
+        }
+
+        .pizzaList>li>div {
+            display: flex;
+            align-items: center;
+        }
+
+        .pizzaList>li>div>span {
+            margin-left: 10px;
+        }
+
+        .mt-1 {
+            margin-top: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="364" height="364" id="pizza"></canvas>
+    <div class="tools">
+        <select onchange="updateslices(this)">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+        </select>
+        <button onclick="loadtray()" class="mt-1">Load tray image</button>
+        <button onclick="printslices()" class="mt-1">Print slices</button>
+        <button onclick="clearslices()" class="mt-1">Clear slices</button>
+
+        <ul class="pizzaList">
+            <li data-value="pepperoni" data-src="assets/images/pizzas/pepperoni.png">
+                <div>
+                    <img src="assets/images/pizzas/pepperoni.png" height="32" />
+                    <span>Pepperoni</span>
+                </div>
+            </li>
+            <li data-value="endive" data-src="assets/images/pizzas/endive.png">
+                <div>
+                    <img src="assets/images/pizzas/endive.png" height="32" />
+                    <span>Endive</span>
+                </div>
+            </li>
+            <li data-value="chicken" data-src="assets/images/pizzas/chicken.png">
+                <div>
+                    <img src="assets/images/pizzas/chicken.png" height="32" />
+                    <span>Chicken</span>
+                </div>
+            </li>
+            <li data-value="shrimp" data-src="assets/images/pizzas/shrimp.png">
+                <div>
+                    <img src="assets/images/pizzas/shrimp.png" height="32" />
+                    <span>Shrimp</span>
+                </div>
+            </li>
+            <li data-value="neapolitan" data-src="assets/images/pizzas/neapolitan.png">
+                <div>
+                    <img src="assets/images/pizzas/neapolitan.png" height="32" />
+                    <span>Neapolitan</span>
+                </div>
+            </li>
+            <li data-value="chocolate" data-src="assets/images/pizzas/chocolate.png">
+                <div>
+                    <img src="assets/images/pizzas/chocolate.png" height="32" />
+                    <span>Chocolate</span>
+                </div>
+            </li>
+        </ul>
+
+        <pre id="print_slices"></pre>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="../src/pizza-canvas.js"></script>
+    <script>
+
+        $(function () {
+            $(".pizzaList > li").draggable({
+                helper: "clone",
+                drag: function(event, ui){
+                    let index = pizza.fireSlicePosition(event.pageX, event.pageY)
+                    if(index != undefined){
+                        pizza.previewSlice(
+                            index,
+                            ui.helper.context.dataset.src
+                        )
+                    }else{
+                        pizza.clearPreview()
+                    }
+                },
+                stop: function( event, ui ) {
+                    pizza.clearPreview()
+                }
+            });
+            $("#pizza").droppable({
+                drop: function (event, ui) {
+                    let index = pizza.fireSlicePosition(event.pageX, event.pageY)
+                    if(index == undefined){
+                        console.log("DROPPED OUT THE PIZZA")
+                    }else{
+                        console.log("DROPPED '" + ui.draggable.context.dataset.value + "' NO SLOT ", index)
+                        pizza.setSliceAsset(
+                            index, 
+                            ui.draggable.context.dataset.src,
+                            { name: ui.draggable.context.dataset.value }
+                        )
+                    }
+                },                
+            });
+        });
+
+        const pizza = new PizzaCanvas({
+            canvasId: "pizza",
+            background: "#e4e4e4",
+            slices: 4,
+            padding: 50,
+            trayBorder: 12,
+        });
+
+        pizza.onSliceClick((index) => {
+            console.log('Selected slice -> ', index)
+            if(index != undefined){
+                //pizza.removeSlice(index)
+                console.log("Seleced slice data:", JSON.stringify(pizza.getSliceData(index)))
+            }
+        })
+
+        function clearslices(){
+            pizza.clear()
+            printslices()
+        }
+
+        function updateslices(element) {
+            pizza.setSlices(element.value)
+        }
+
+        function loadtray() {
+            pizza.setTrayAsset('assets/images/pizzas/forma.png')
+        }
+
+        function printslices() {
+            document.getElementById("print_slices").innerHTML = JSON.stringify(pizza.getData(), null, 2)
+        }
+
+    </script>
+</body>
+
+</html>
